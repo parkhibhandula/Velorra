@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema({
-    fullName:{
+    fullname:{
         type:String,
         minLength:2,
         trim:true
     },
-    email:String,
+    email:{
+        type:String,
+        unique:true,
+        required:true
+    },
     password:String,
     cart:{
         type:Array,
         default:[]
     },
-    isAdmin:Boolean,
     orders:{
         type:Array,
         default:[]
