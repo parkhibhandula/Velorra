@@ -21,4 +21,8 @@ else{
 }
 })
 }
+router.get('/adminPanel',(req,res)=>{
+    let success =req.flash('success');
+    res.render('createproducts',{success:success});
+})
 module.exports = router;

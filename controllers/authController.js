@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {generateToken}= require('../utils/generateToken');
 const userModel = require('../models/userModel');
+const productModel = require('../models/product');
 
 module.exports.registeredUser = async(req,res)=>{
     let{fullname,email,password,}= req.body;
@@ -22,7 +23,8 @@ module.exports.registeredUser = async(req,res)=>{
                 })
                 let token = generateToken(user);
                 res.cookie('token',token);
-               res.render('shop');
+                let products = await productModel.find(); 
+               res.render('shop',{products:products});
             }
         })
     })
@@ -32,16 +34,22 @@ module.exports.loginUser = async(req,res)=>{
     let{email,password} = req.body;
     let user = await userModel.findOne({email:email});
     if(!user){
-        return res.render('/',{error:'Incorrect email or password'});
+        return res.render('index',{error:'Incorrect email or password'});
     }
-    bcrypt.compare(password,user.password,(err,result)=>{
+    bcrypt.compare(password,user.password,async(err,result)=>{
         if(result){
             let token = generateToken(user);
             res.cookie('token',token);
-            res.render('shop');
+            let products = await productModel.find(); 
+            res.render('shop',{products:products});
         }
         else{
-            res.render('/',{error:'Incorrect email or password'});
+            res.render('index',{error:'Incorrect email or password'});
         }
     })
+}
+
+module.exports.logoutUser = (req,res)=>{
+    res.cookie('token','');
+    res.redirect('/');
 }
