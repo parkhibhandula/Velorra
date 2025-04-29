@@ -19,7 +19,11 @@ await user.save();
 req.flash('success','Added to Cart');
 res.redirect('/shop');
 })
-router.get('/cart',async(req,res)=>{
-    res.render('cart');
+router.get('/cart',isLoggedIn,async(req,res)=>{
+    let user = await userModel.findOne({email:req.user.email}).populate('cart');
+res.render('cart',{user});
+})
+router.get('/profile',isLoggedIn,async(req,res)=>{
+    res.render('profile',{user:req.user});
 })
 module.exports = router;

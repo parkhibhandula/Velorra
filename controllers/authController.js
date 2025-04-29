@@ -24,7 +24,8 @@ module.exports.registeredUser = async(req,res)=>{
                 let token = generateToken(user);
                 res.cookie('token',token);
                 let products = await productModel.find(); 
-               res.render('shop',{products:products});
+                let success = req.flash('success');
+               res.render('shop',{products:products,success:success});
             }
         })
     })
@@ -41,7 +42,8 @@ module.exports.loginUser = async(req,res)=>{
             let token = generateToken(user);
             res.cookie('token',token);
             let products = await productModel.find(); 
-            res.render('shop',{products:products});
+            let success = req.flash('success');
+            res.render('shop',{products:products,success:success});
         }
         else{
             res.render('index',{error:'Incorrect email or password'});
