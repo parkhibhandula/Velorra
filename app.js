@@ -30,4 +30,7 @@ app.use('/users',userRouter);
 app.use('/owners',ownerRouter);
 app.use('/products',productRouter);
 
-app.listen(3000);
+const port = process.env.PORT || 3000;
+app.listen(port,()=>{
+console.log(`Server running on ${port}`);
+});
